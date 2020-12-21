@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Image,
   ScrollView,
@@ -23,6 +23,10 @@ const SignUp: React.FC = () => {
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
 
+  const handleSignUp = useCallback((data: Record<string, unknown>) => {
+    console.log(data);
+  }, []);
+
   return (
     <>
       <KeyboardAvoidingView
@@ -42,9 +46,7 @@ const SignUp: React.FC = () => {
 
             <Form
               ref={formRef}
-              onSubmit={data => {
-                console.log(data);
-              }}
+              onSubmit={handleSignUp}
               style={{ width: '100%' }}
             >
               <Input icon="user" name="name" placeholder="Nome" />
