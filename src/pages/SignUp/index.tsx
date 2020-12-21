@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   View,
+  TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
@@ -22,6 +23,8 @@ import { Container, Title, BackToSignIn, BackToSignInText } from './styles';
 const SignUp: React.FC = () => {
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
+  const emailInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
   const handleSignUp = useCallback((data: Record<string, unknown>) => {
     console.log(data);
@@ -49,9 +52,39 @@ const SignUp: React.FC = () => {
               onSubmit={handleSignUp}
               style={{ width: '100%' }}
             >
-              <Input icon="user" name="name" placeholder="Nome" />
-              <Input icon="mail" name="email" placeholder="E-mail" />
-              <Input icon="lock" name="password" placeholder="Senha" />
+              <Input
+                autoCapitalize="words"
+                icon="user"
+                name="name"
+                placeholder="Nome"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  emailInputRef.current?.focus();
+                }}
+              />
+              <Input
+                ref={emailInputRef}
+                keyboardType="email-address"
+                autoCorrect={false}
+                autoCapitalize="none"
+                icon="mail"
+                name="email"
+                placeholder="E-mail"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus();
+                }}
+              />
+              <Input
+                ref={passwordInputRef}
+                secureTextEntry
+                textContentType="newPassword"
+                icon="lock"
+                name="password"
+                placeholder="Senha"
+                returnKeyType="send"
+                onSubmitEditing={() => formRef.current?.submitForm()}
+              />
 
               <Button onPress={() => formRef.current?.submitForm()}>
                 Cadastrar

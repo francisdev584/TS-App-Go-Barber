@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   View,
+  TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
@@ -28,6 +29,7 @@ import {
 
 const SignIn: React.FC = () => {
   const navigation = useNavigation();
+  const passwordInputRef = useRef<TextInput>(null);
   const formRef = useRef<FormHandles>(null);
   const handleSignIn = useCallback((data: Record<string, unknown>) => {
     console.log(data);
@@ -55,8 +57,29 @@ const SignIn: React.FC = () => {
               onSubmit={handleSignIn}
               style={{ width: '100%' }}
             >
-              <Input icon="mail" name="email" placeholder="E-mail" />
-              <Input icon="lock" name="password" placeholder="Senha" />
+              <Input
+                autoCorrect={false}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                returnKeyType="next"
+                icon="mail"
+                name="email"
+                placeholder="E-mail"
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus();
+                }}
+              />
+              <Input
+                ref={passwordInputRef}
+                secureTextEntry
+                returnKeyType="send"
+                onSubmitEditing={() => {
+                  formRef.current?.submitForm();
+                }}
+                icon="lock"
+                name="password"
+                placeholder="Senha"
+              />
 
               <Button
                 onPress={() => {
